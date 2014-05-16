@@ -1,0 +1,127 @@
+#!/bin/bash
+
+# -------------
+# Prerequisites
+# -------------
+
+# Turn on extended bash patterns.
+shopt -s extglob
+
+# status_offset = offset at which `status` function prints message.
+status_offset=$(expr $(tput  cols) - 8)
+
+# options = array of global script arguments.
+declare -a options
+for a; do
+    # explicit addition by index to preserve blanks
+    options[${#options[@]}]="$a"
+done
+
+# -------
+# Generic
+# -------
+
+# Outupt status message depending on exit code of previous opertation.
+# Dies if exit code > 0.
+status() #exit_code=$?
+{
+    local code="${1:-$?}"
+    move_to ${status_offset:-80}
+    if [ $code -gt 0 ]; then
+        echo "[$(format 30 41 error)]"
+        exit $code
+    fi
+    echo "[$(format 92 success)]"
+}
+
+# Print \n-separated list of script options corresponding to given key.
+# Example: $ ./my_script.sh -a -b Hello -c -b World
+#          Outputs "-b\nHello\n-b\nWorld".
+#          $ ./my_script.sh --long-name="value"
+#          Outputs "--long-name\nvalue".
+option() #name
+{
+    local match=0
+    for a in "${options[@]}"; do
+        [[ "$a" == -* ]] && local match=0 &&\
+        local name="${a/=*/}" &&\
+        [ "${name/#+(-)/}" == "$1" ] && local match=1 &&\
+        echo "$name" &&  a=${a##$name=}
+        
+        # print actual value of looked-up option
+        [ $match -eq 1 -a -n "$a" ] && echo $a
+    done
+}
+
+# Returns 0 when script contained option specified.
+has_option() #name
+{
+    [ -n "$(option $@)" ]
+}
+
+# Escapes special regular expression characters.
+unregex() #string
+{
+    echo -en "$@" | sed -e 's/[]+\/()$*.^|[]/\\&/g'
+}
+
+# ------------------
+# Formatting & Tools
+# ------------------
+
+# Print formatted text to console without terminating linefeed.
+# If font color was affected during output formatting it is reverted
+# to console default state: black background and white foreground.
+# See http://misc.flogisoft.com/bash/tip_colors_and_formatting
+# Example: $ format 4 41 99 one two
+#          Prints "99 one two" underlined and with red background.
+#          "99" is outputted because it does not represent any control character.
+#          To avoid ambiguty use quotes for text argument.
+format() #code..., text=""
+{
+    # control character patterns
+    local p='\033['
+    local t='[124578]'
+    local f='[39][0-7]|39'
+    local b='(4|10)[0-7]|49'
+    [ $# -le 1 ] || [[ ! "$1" =~ 0|$t|$f|$b ]] && echo -ne "$@" && return 0
+    can_ansi && echo -ne "$p${1}m" # open format sequence
+    format ${@:2:$(($#-2))} "${!#}" # recursive call without first arg and enquoted last arg
+    if can_ansi; then
+        [[ $1 =~ $t ]] && echo -ne "${p}2${1}m" # close text format sequence
+        [[ $1 =~ $f ]] && echo -ne "${p}39m" # revert foreground
+        [[ $1 =~ $b ]] && echo -ne "${p}49m" # revert background
+    fi
+}
+
+# Outputs underlined text to console without terminating linefeed.
+u() #text=""
+{
+    format 4 "$@"
+}
+
+# Move cursor to requested position.
+move_to() #x
+{
+    can_ansi && echo -ne "\\033[${1}G"
+}
+
+# Returns 0 if terminal supports ANSI control characters output.
+can_ansi()
+{
+    [ $(tput -T $TERM colors) -ge 8 ]
+}
+
+# -------------------
+# Assertions & Checks
+# -------------------
+
+# Asserts that a provided condition is true and dies otherwise.
+# Example: $ assert '-n ""' "nonempty string expected"
+#          Prints "nonempty string expected".
+assert() #condition="", message=""
+{
+    [ -n "$1" ] && eval "test $1" && return 0
+    echo -e "${*:2}"
+    exit 1
+}
