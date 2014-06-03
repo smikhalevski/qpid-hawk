@@ -61,7 +61,7 @@ Create queue if it does not exist. If queue with given name already exist comman
   * <code><b>--generate-queue-events</b> N</code> If set to `1`, every enqueue will generate an event that can be processed by registered listeners (e.g. for replication). If set to `2`, events will be generated for enqueues and dequeues.
 
 Creating two queues parameters reuse:
-```shell
+```bash
 default='--durable --cluster-durable'
 queue 'test.queue.1' $default
 queue 'test.queue.2' $default
@@ -71,7 +71,7 @@ queue 'test.queue.2' $default
 
 Create new binding if it does not exist.
 
-**Implemetation Quirk** Renaming `amq.match` binding key that does not change of any of its parameters requires running script two times sequentially! This issue is planned to be fixed in future releases.
+**Implemetation Quirk.** Renaming `amq.match` binding key that does not change of any of its parameters requires running script two times sequentially! This issue is planned to be fixed in future releases.
 
 **Parameters**<br/>
 * **`exchange_name`** Name of exchange to create.
@@ -79,14 +79,14 @@ Create new binding if it does not exist.
 * **`binding_key`** Binding key name, empty by default.
 
 Creating `amq.direct` binding to `test.queue.2` queue:
-```shell
+```bash
 binding 'amq.direct' 'test.queue.2' 'my_binding'
 ```
 
 **Shortcuts**<br/>
 **`binding`** function can be replaced with several shortcuts to omit explicit exchange **name** specification: **`amq_topic_binding`**, **`amq_match_binding`** and **`amq_direct_binding`** which create bindings for `amq.topic`, `amq.match` and `amq.direct` respectively.
 
-```shell
+```bash
 amq_direct_binding 'test.message.2' 'test.queue.2'
 ```
 
@@ -115,7 +115,7 @@ Remove queues from Qpid which were not touched during current configuration sess
 * **`skip_pattern`** Queues matching provided Perl pattern are preserved during cleanup, empty by default.
 
 Excluding system queues from cleanup process:
-```shell
+```bash
 cleanup_queues 'topic-|qmfc-|bridge_queue|qmfagent|reply|Temp|Qpid'
 ```
 
@@ -127,7 +127,7 @@ Remove bindings from Qpid which were not touched during current configuration se
 * **`skip_pattern`** Bindings matching provided pattern are preserved during cleanup, empty by default. Each binding is a sting `exchnage_name queue_name binding_key` wich is matched against provided pattern.
 
 Excluding system bindings from cleanup process:
-```shell
+```bash
 cleanup_bindings 'qpid.management|qmf.default|qmfagent|reply|bridge|Temp|Qpid'
 ```
 
@@ -139,7 +139,7 @@ Remove exchnages from Qpid which were not touched during current configuration s
 * **`skip_pattern`** Exchnages matching provided pattern are preserved during cleanup, empty by default.
 
 Excluding system exchanges from cleanup process:
-```shell
+```bash
 cleanup_exchanges '^amq\.|^qpid\.|^qmf\.'
 ```
 
