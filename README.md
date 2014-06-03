@@ -17,7 +17,11 @@ Library uses [`qpid-config`][--help] and [`qpid-stat`][--help] under the hood so
     4. [`exchange`](#exchange)
         1. [`topic_exchange`](#topic_exchange)
         2. [`direct_exchange`](#direct_exchange)
-3. [License](#license)
+3. [Cleanup](#cleanup)
+    1. [`cleanup_queues`](#cleanup_queues)
+    2. [`cleanup_bindings`](#cleanup_bindings)
+    3. [`cleanup_exchanges`](#cleanup_exchanges)
+4. [License](#license)
 
 ## Targeting Broker
 
