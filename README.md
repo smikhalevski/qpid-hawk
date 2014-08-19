@@ -11,12 +11,12 @@ Library uses [`qpid-config`][--help] and [`qpid-stat`][--help] under the hood so
 2. [Creating](#creating)
     2. [`queue`](#queue)
     3. [`binding`](#binding)
-        1. [`amq_topic_binding`](#amq_topic_binding)
-        2. [`amq_match_binding`](#amq_match_binding)
-        2. [`amq_direct_binding`](#amq_direct_binding)
+        1. [`amq_topic_binding`](#binding-shortcuts)
+        2. [`amq_match_binding`](#binding-shortcuts)
+        2. [`amq_direct_binding`](#binding-shortcuts)
     4. [`exchange`](#exchange)
-        1. [`topic_exchange`](#topic_exchange)
-        2. [`direct_exchange`](#direct_exchange)
+        1. [`topic_exchange`](#exchange-shortcuts)
+        2. [`direct_exchange`](#exchange-shortcuts)
 3. [Cleanup](#cleanup)
     1. [`cleanup_queues`](#cleanup_queues)
     2. [`cleanup_bindings`](#cleanup_bindings)
@@ -87,7 +87,7 @@ Creating `amq.direct` binding to `test.queue.2` queue:
 binding 'amq.direct' 'test.queue.2' 'my_binding'
 ```
 
-**Shortcuts**<br/>
+<a name="binding-shortcuts"></a>**Shortcuts**<br/>
 **`binding`** function can be replaced with several shortcuts to omit explicit exchange **name** specification: **`amq_topic_binding`**, **`amq_match_binding`** and **`amq_direct_binding`** which create bindings for `amq.topic`, `amq.match` and `amq.direct` respectively.
 
 ```bash
@@ -106,7 +106,7 @@ Create new exchange if it does not exist.
   * **`--sequence`** Exchange will insert a `qpid.msg_sequence` field in the message header with a value that increments for each message forwarded.
   * **`--ive`** Exchange will behave as an `initial-value-exchange`, keeping a reference to the last message forwarded and enqueuing that message to newly bound queues.
 
-**Shortcuts**<br/>
+<a name="exchange-shortcuts"></a>**Shortcuts**<br/>
 **`exchange`** function can be replaced with several shortcuts to omit explicit exchange **type** specification: **`topic_exchange`** and **`direct_exchange`** which create `topic` and `direct` exchanges respectively.
 
 ## Cleanup
