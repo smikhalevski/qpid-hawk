@@ -8,7 +8,7 @@ Library uses [`qpid-config`][--help] and [`qpid-stat`][--help] under the hood so
 
 1. [Targeting Broker](#targeting-broker)
     1. [`use`](#use)
-2. [Creating](#creating)
+2. [Creating Entities](#creating-entities)
     2. [`queue`](#queue)
     3. [`binding`](#binding)
         1. [`amq_topic_binding`](#binding-shortcuts)
