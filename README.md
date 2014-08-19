@@ -1,4 +1,4 @@
-# Qpid Hawk
+# ![Qpid Hawk](hawk.png) Qpid Hawk
 
 Bash-based Apache Qpid incremental re/configurator. 
 
