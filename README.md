@@ -2,7 +2,7 @@
 
 Bash-based Apache Qpid incremental re/configurator. 
 
-Library uses [`qpid-config`][--help] and [`qpid-stat`][--help] under the hood so they <b>must</b> present in your environment path. Import to your codebase with <code>. "$(dirname "$(readlink -f "$0")")/<b><a href="qpid-hawk">qpid-hawk</a><b>"</code> snippet.
+Library uses [`qpid-config`][--help] and [`qpid-stat`][--help] under the hood so they <b>must</b> present in your environment path. Import to your codebase with <code>. "$(dirname "$(readlink -f "$0")")/<b><a href="qpid-hawk">qpid-hawk</a></b>"</code> snippet.
 
 ## Contents
 
